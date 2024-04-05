@@ -12,6 +12,7 @@ Before running the project, you need to set up your environment variables:
 Create a .env file in the root directory of the project.
 
 Add your Discord token to the .env file. It should look like this:
+
 DISCORD_TOKEN=[your token]
 
 Replace [your token] with your actual Discord bot token.
