@@ -170,18 +170,18 @@ def get_response(user_message: str) -> str:
     # Handling responses based on the player's current state
     if player.state == "strategic_decision_point":
         user_choice = user_message.lower()
-        if "review" in user_choice:
+        if "review" in user_choice or "achievements" in user_choice:
             return f"Your current status: HP: {player.hp}, Score: {player.score}."
-        elif "prepare" in user_choice or "reset" in user_choice:
+        elif "prepare" in user_choice or "reset" in user_choice or "future" in user_choice or "adventure" in user_choice:
             player.reset_player()
             return "You decide to prepare for new adventures. The cosmos resets, but your experience remains. When you're ready, new challenges await."
-        elif "celebrate" in user_choice or "rest" in user_choice:
+        elif "celebrate" in user_choice or "rest" in user_choice or "end" in user_choice or "session" in user_choice:
             return "You take a moment to rest and celebrate your achievements. The universe will hold more adventures when you return."
 
     # Define actions with potential outcomes
     actions = {
         "set_course": {
-            "synonyms": ["set", "course", "navigate", "chart", "plot", "path"],
+            "synonyms": ["set", "course", "navigate", "chart", "plot", "path", "star", "system", "through", "nebulous", "region"],
             "valid_states": ["beginning"],
             "points": [1, 2, 3],  # Assigning minimal points as it's the beginning of the game.
             "hp_change": [0, 0, 0],  # No HP change for setting a course.
@@ -193,7 +193,7 @@ def get_response(user_message: str) -> str:
             "next_state": "exploring"  # Leads to the exploration phase.
         },
         "explore": {
-            "synonyms": ["explore", "exploring", "investigate", "analyze", "findings", "probe"],
+            "synonyms": ["explore", "exploring", "investigate", "analyze", "findings", "probe", "return", "base"],
             "valid_states": ["exploring"],
             "points": [6, 4, 2],
             "hp_change": [0, 5, 5],
@@ -205,7 +205,7 @@ def get_response(user_message: str) -> str:
             "next_state": "analyzing"
         },
         "scan": {
-            "synonyms": ["scan", "survey", "examine", "inspect"],
+            "synonyms": ["scan", "survey", "examine", "inspect", "deep", "space", "sector", "nearby", "perform", "initiate", "threat", "detailed"],
             "valid_states": ["scanning"],
             "points": [10, 5, 0],
             "hp_change": [10, 5, -10],
@@ -218,7 +218,8 @@ def get_response(user_message: str) -> str:
             "next_state": "mining"
         },
         "check": {
-            "synonyms": ["check", "monitor", "assess", "evaluate"],
+            "synonyms": ["check", "monitor", "assess", "evaluate", "health", "morale", "initiate", "team-building",
+                         "exercise", "address", "crew", "concerns"],
             "valid_states": ["checking"],
             "points": [2, 1, 3],
             "hp_change": [-5, 0, 5],
@@ -230,7 +231,8 @@ def get_response(user_message: str) -> str:
             "next_state": "repairing"
         },
         "repair": {
-            "synonyms": ["repair", "repairs", "upgrade", "enhance", "fix", "mend", "restore"],
+            "synonyms": ["repair", "repairs", "upgrade", "enhance", "fix", "mend", "restore", "complete", "ship",
+                         "maintenance", "check", "conduct"],
             "valid_states": ["repairing"],
             "points": [2, 3, 4],
             "hp_change": [5, 10, 15],
@@ -242,7 +244,8 @@ def get_response(user_message: str) -> str:
             "next_state": "exploring"
         },
         "trade": {
-            "synonyms": ["negotiate", "barter", "decline", "no", "accept"],
+            "synonyms": ["negotiate", "barter", "decline", "no", "accept", "deal", "current", "offer", "explore",
+                         "options"],
             "valid_states": ["trading"],
             "points": [4, 3, 5],
             "hp_change": [0, -5, 5],
@@ -254,7 +257,8 @@ def get_response(user_message: str) -> str:
             "next_state": "checking"
         },
         "negotiate": {
-            "synonyms": ["negotiate", "confer", "discuss", "ally"],
+            "synonyms": ["negotiate", "confer", "discuss", "ally", "discuss", "potential", "alliance", "cease-fire",
+                         "engage", "trade", "negotiations"],
             "valid_states": ["negotiating"],
             "points": [5, 3, 2],
             "hp_change": [0, 0, -10],
@@ -266,7 +270,8 @@ def get_response(user_message: str) -> str:
             "next_state": "trading"
         },
         "analyze": {
-            "synonyms": ["analyze", "asteroid", "examine", "investigate", "research"],
+            "synonyms": ["analyze", "asteroid", "examine", "investigate", "research", "asteroid's", "asteroids", "core",
+                         "samples", "alien", "artifact", "strange", "signals"],
             "valid_states": ["analyzing"],
             "points": [6, 4, 2],
             "hp_change": [0, -5, -10],
@@ -278,7 +283,8 @@ def get_response(user_message: str) -> str:
             "next_state": "scanning"
         },
         "mine": {
-            "synonyms": ["mine", "extract", "harvest", "excavate"],
+            "synonyms": ["mine", "extract", "harvest", "excavate", "resources", "valuable", "search", "materials",
+                         "evaluate", "potential", "risks"],
             "valid_states": ["mining"],
             "points": [3, 2, 5],
             "hp_change": [-5, 0, 10],
@@ -290,7 +296,8 @@ def get_response(user_message: str) -> str:
             "next_state": "interacting"
         },
         "interact": {
-            "synonyms": ["interact", "communicate", "engage", "respond"],
+            "synonyms": ["interact", "communicate", "engage", "respond", "signal", "proceed", "caution", "avoid",
+                         "encounter"],
             "valid_states": ["interacting"],
             "points": [3, 2, 1],
             "hp_change": [0, -5, 5],
@@ -302,7 +309,7 @@ def get_response(user_message: str) -> str:
             "next_state": "negotiating"
         },
         "strategic_planning": {
-            "synonyms": ["enhance", "plan", "strategize", "organize", "prepare"],
+            "synonyms": ["enhance", "plan", "strategize", "organize", "prepare", "ship", "explore", "new", "territories", "consolidate", "resources"],
             "valid_states": ["strategic_planning"],
             "points": [7, 5, 4],  # Enhanced point rewards
             "hp_change": [5, 10, 0],  # Minimized HP loss and enhanced HP gains
@@ -314,7 +321,8 @@ def get_response(user_message: str) -> str:
             "next_state": "deep_space_exploration"
         },
         "deep_space_exploration": {
-            "synonyms": ["explore", "venture", "investigate", "discover"],
+            "synonyms": ["explore", "venture", "investigate", "discover", "drifting", "space", "station", "navigate",
+                         "temporal", "rift", "mysterious", "nebula"],
             "valid_states": ["deep_space_exploration"],
             "points": [6, 4, 3],  # Slightly less than strategic_planning but still rewarding
             "hp_change": [0, 5, -5],  # Mixed outcomes with potential for both gain and minor loss
@@ -326,7 +334,8 @@ def get_response(user_message: str) -> str:
             "next_state": "cosmic_anomaly_encounter"  # Leads to various potential scenarios
         },
         "cosmic_anomaly_encounter": {
-            "synonyms": ["investigate", "enter", "observe", "harness", "energy", "approach", "analyze", "examine"],
+            "synonyms": ["investigate", "enter", "observe", "harness", "energy", "approach", "analyze", "examine",
+                         "dimensional", "gateway", "collapsing", "star", "safe", "distance", "attempt", "harness", "energy", "cosmic", "artifact"],
             "valid_states": ["cosmic_anomaly_encounter"],
             "points": [4, 6, 2],  # Varied points reflecting the risks and rewards
             "hp_change": [0, -10, 5],  # Potential risk or minor health gain
@@ -338,7 +347,8 @@ def get_response(user_message: str) -> str:
             "next_state": "anomaly_aftermath"  # Transition to dealing with the aftermath of the choice
         },
         "anomaly_aftermath": {
-            "synonyms": ["reflect", "analyze", "knowledge", "study", "data", "stabilize", "consequence", "outcome"],
+            "synonyms": ["reflect", "analyze", "knowledge", "study", "data", "stabilize", "consequence", "outcome",
+                         "artifacts", "obtained", "gateway", "collected", "collapsing", "star"],
             "valid_states": ["anomaly_aftermath"],
             "points": [3, 2, 5],  # Reflecting a range of outcomes based on the choice made
             "hp_change": [5, 0, -5],  # Health adjustments based on the nature of the aftermath
@@ -350,7 +360,7 @@ def get_response(user_message: str) -> str:
             "next_state": "strategic_decision_point"  # Leading back to a decision-making juncture
         },
         "strategic_decision_point": {
-            "synonyms": ["decide", "plan", "strategize", "choose"],
+            "synonyms": ["decide", "plan", "strategize", "choose", "review", "achievements", "prepare", "future", "adventures", "celebrate", "rest"],
             "valid_states": ["strategic_decision_point"],
             "points": [2, 3, 4],  # Points reflecting strategic thinking and planning
             "hp_change": [0, 0, 0],  # No health change, focusing on strategy
@@ -362,7 +372,8 @@ def get_response(user_message: str) -> str:
             "next_state": "new_exploration_phase"  # Transition to a new phase of exploration or interaction
         },
         "recovery_phase": {
-            "synonyms": ["repair", "boost", "assess"],
+            "synonyms": ["repair", "boost", "assess", "repairs", "ship", "boost", "boosting", "morale", "crew", "focus",
+                         "send", "distress", "signal", "assistance"],
             "valid_states": ["recovery_phase"],
             "points": [2, 2, 2],
             "hp_change": [10, 0, 0],
