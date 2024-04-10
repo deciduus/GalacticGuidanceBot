@@ -1,6 +1,5 @@
 # responses.py
 import random
-from random import choice
 
 # Import the SpacePiratesEvent class from the separate file
 from space_pirates_event import SpacePiratesEvent
@@ -156,8 +155,8 @@ def simple_hash(synonym, outcomes_count):
     # A simple hash function: sum ASCII values and mod by number of outcomes
     return sum(ord(char) for char in synonym) % outcomes_count
 
-def get_response(user_input: str) -> str:
-    lowered = user_input.lower().split()
+def get_response(user_message: str) -> str:
+    lowered = user_message.lower().split()
 
     # Trigger the space pirates event if the score threshold is reached, the event hasn't occurred yet, and the player has at least 20 health
     if player.score >= 20 and not player.has_encountered_space_pirates and player.hp >= 20:
@@ -166,11 +165,11 @@ def get_response(user_input: str) -> str:
 
     # If the current state involves the space pirates event, delegate handling to the SpacePiratesEvent class
     if player.state in ["space_pirates", "pirates_combat", "pirates_hiding_success", "pirates_hiding_failure"]:
-        return space_pirates_event.handle_event(user_input)
+        return space_pirates_event.handle_event(user_message)
 
     # Handling responses based on the player's current state
     if player.state == "strategic_decision_point":
-        user_choice = user_input.lower()
+        user_choice = user_message.lower()
         if "review" in user_choice:
             return f"Your current status: HP: {player.hp}, Score: {player.score}."
         elif "prepare" in user_choice or "reset" in user_choice:
@@ -376,7 +375,7 @@ def get_response(user_input: str) -> str:
         },
     }
 
-    lowered_words = user_input.lower().split()
+    lowered_words = user_message.lower().split()
     action_taken = False
     consequence = ""
     hp_change = 0

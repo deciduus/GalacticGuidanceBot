@@ -52,7 +52,7 @@ class SpacePiratesEvent:
                 return self.attempt_hiding()
             elif "signal" in user_input or "help" in user_input:
                 return self.signal_for_help()
-            return "The space pirates are approaching. What's your plan? Fight, attempt to hide, or signal for help?"
+            return "The space pirates are approaching. What's your plan?"
         # If no user_input (automatic progression), decide a random approach (combat/hide/help)
         # For demonstration, let's assume it chooses to hide
         return self.attempt_hiding()
